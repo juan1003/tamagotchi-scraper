@@ -1,15 +1,16 @@
 const express = require("express");
 const logger = require("morgan")('common');
+const cors = require("cors");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const path = require("path");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static('public'));
 app.use(logger);
 
 async function scrapeTamagortchiPage(){
@@ -31,9 +32,7 @@ async function scrapeTamagortchiPage(){
     return scrapedTamas;
 }
 
-app.get('/', function(req, res) {
-    res.sendFile(path.join('/index.html'));
-});
+
 
 app.get('/tamas', async function(req, res) {
     const tamas = await scrapeTamagortchiPage();
